@@ -12,6 +12,8 @@
  */
 package io.scalecube.socketio;
 
+
+// 定义消息的类型
 public enum TransportType {
   XHR_POLLING("xhr-polling"),
   WEBSOCKET("websocket"),
