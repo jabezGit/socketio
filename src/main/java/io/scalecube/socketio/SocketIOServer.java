@@ -12,7 +12,6 @@
  */
 package io.scalecube.socketio;
 
-//
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,14 +35,12 @@ import io.scalecube.socketio.session.SocketIOHeartbeatScheduler;
  */
 public class SocketIOServer {
 
-  // 这个jar包几乎成了开发服务器的标准了
   private final Logger log = LoggerFactory.getLogger(getClass());
 
   private enum State {
     STARTED, STOPPED
   }
   
-  // 设置配置文件
   private ServerConfiguration configuration;
   
   private SocketIOListener listener;
@@ -57,12 +54,10 @@ public class SocketIOServer {
   private ServerBootstrap bootstrap;
 
   private SocketIOServer(ServerConfiguration configuration) {
-    // 只需要传入一个配置文件即可
     this.configuration = configuration;
   }
 
   /**
-   * 使用默认的配置创建socket.IO 实例
    * Creates instance of Socket.IO server with default settings.
    */
   public static SocketIOServer newInstance() {
@@ -70,7 +65,6 @@ public class SocketIOServer {
   }
 
   /**
-   * 通过传入的端口值来创建Socket.io实例
    * Creates instance of Socket.IO server with the given port.
    */
   public static SocketIOServer newInstance(int port) {
@@ -78,7 +72,6 @@ public class SocketIOServer {
   }
 
   /**
-   * 通过安全端口创建实例，这也就是. ssl 的作用
    * Creates instance of Socket.IO server with the given secure port.
    */
   public static SocketIOServer newInstance(int port, SSLContext sslContext) {
@@ -89,7 +82,6 @@ public class SocketIOServer {
   }
 
   /**
-   * 通过传入的配置文件来创建Socket.io 实例
    * Creates instance of Socket.IO server with the given configuration.
    */
   public static SocketIOServer newInstance(ServerConfiguration config) {
@@ -97,44 +89,33 @@ public class SocketIOServer {
   }
 
   /**
-   * 通过目前的配置文件来启动 socket 服务器
    * Starts Socket.IO server with current configuration settings.
    *
-   *  抛出一个异常如果服务器已经启动了
    * @throws IllegalStateException
    *             if server already started
    */
   public synchronized void start() {
     if (isStarted()) {
       throw new IllegalStateException("Failed to start Socket.IO server: server already started");
-    }
-    // 使用log4j插件来显示现在服务器已经启动了
+    }了
     log.info("Socket.IO server starting");
 
     // Configure heartbeat scheduler
-    // 配置心跳调度器
     timer = new HashedWheelTimer();
-    // 启动时间定时器
     timer.start();
     SocketIOHeartbeatScheduler.setHashedWheelTimer(timer);
     SocketIOHeartbeatScheduler.setHeartbeatInterval(configuration.getHeartbeatInterval());
     SocketIOHeartbeatScheduler.setHeartbeatTimeout(configuration.getHeartbeatTimeout());
 
     // Configure server
-    // 配置服务器
     SocketIOChannelInitializer channelInitializer = new SocketIOChannelInitializer(configuration, listener);
-    // 判断现在的bootsrap 是否就绪状态
     bootstrap = serverBootstrapFactory != null ? serverBootstrapFactory.createServerBootstrap() :
         createDefaultServerBootstrap();
-    // 启动服务器
     bootstrap.childHandler(channelInitializer);
     
-    // 绑定端口
     int port = configuration.getPort();
     bootstrap.bind(new InetSocketAddress(port));
-    // 将状态机的状态设成启动状态
     state = State.STARTED;
-    // 写入日志文件。服务器目前的状态为就绪态
     log.info("Started {}", this);
   }
 
@@ -147,9 +128,7 @@ public class SocketIOServer {
   }
 
   /**
-   * 停止Socket服务
-   * Stops Socket.IO server.
-   * 如果服务器已经关闭了，那么将抛出一个服务器已经关闭了的异常
+   * Stops Socket.IO server
    * @throws IllegalStateException
    *             if server already stopped
    */
@@ -157,13 +136,9 @@ public class SocketIOServer {
     if (isStopped()) {
       throw new IllegalStateException("Failed to stop Socket.IO server: server already stopped");
     }
-    // 将这条信息写入到日志系统中
     log.info("Socket.IO server stopping");
-    // 定时器终止
     timer.stop();
-    // 将组关闭，这个过程中不允许中断
     bootstrap.group().shutdownGracefully().syncUninterruptibly();
-    // 改变状态机的状态
     state = State.STOPPED;
     
     log.info("Socket.IO server stopped");
@@ -184,7 +159,6 @@ public class SocketIOServer {
    * Returns if server is in started state or not.
    */
   public boolean isStarted() {
-    // 通过查询状态机来显示目前服务器运行的状态
     return state == State.STARTED;
   }
 
@@ -196,7 +170,6 @@ public class SocketIOServer {
   }
 
   /** 
-   * 获得这个IO时间的监听者
    * Socket.IO events listener.
    */
   public SocketIOListener getListener() {
@@ -227,7 +200,6 @@ public class SocketIOServer {
   }
 
   /**
-   * 需要了解这个工厂类的作用
    * Returns ServerBootstrap factory.
    */
   public ServerBootstrapFactory getServerBootstrapFactory() {
@@ -242,7 +214,6 @@ public class SocketIOServer {
     this.serverBootstrapFactory = serverBootstrapFactory;
   }
 
-  // 重构toString 方法
   @Override
   public String toString() {
     return "SocketIOServer{" +
