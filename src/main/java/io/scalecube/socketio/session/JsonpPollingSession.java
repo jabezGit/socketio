@@ -18,6 +18,7 @@ import io.netty.channel.Channel;
 import io.scalecube.socketio.TransportType;
 import io.scalecube.socketio.packets.IPacket;
 
+// 重构的是轮询Session
 public class JsonpPollingSession extends AbstractPollingSession {
 
   private final String jsonpIndexParam;
@@ -33,6 +34,7 @@ public class JsonpPollingSession extends AbstractPollingSession {
     return TransportType.JSONP_POLLING;
   }
 
+  // 这就是框架带来的好处，这里实现不同的方法就很简单了
   @Override
   protected void fillPacketHeaders(IPacket packet) {
     super.fillPacketHeaders(packet);
