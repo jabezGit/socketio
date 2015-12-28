@@ -31,6 +31,7 @@ public class HeartbeatHandler extends ChannelInboundHandlerAdapter {
 
   @Override
   public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+    // 判断条件
     if (msg instanceof Packet) {
       final Packet packet = (Packet) msg;
       if (packet.getType() == PacketType.HEARTBEAT) {
