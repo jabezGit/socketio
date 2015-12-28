@@ -45,6 +45,7 @@ public class XHRPollingHandler extends ChannelInboundHandlerAdapter {
 
   @Override
   public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+    // 判断条件
     if (msg instanceof FullHttpRequest) {
       final FullHttpRequest req = (FullHttpRequest) msg;
       final HttpMethod requestMethod = req.getMethod();
