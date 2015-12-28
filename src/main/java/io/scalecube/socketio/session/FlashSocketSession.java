@@ -24,6 +24,7 @@ public class FlashSocketSession extends AbstractSocketSession {
     super(channel, sessionId, origin, disconnectHandler, upgradedFromTransportType, localPort, remoteAddress);
   }
 
+  // 这里只要设置传输模式为flashsocket即可，好方便的说
   @Override
   public TransportType getTransportType() {
     return TransportType.FLASHSOCKET;
