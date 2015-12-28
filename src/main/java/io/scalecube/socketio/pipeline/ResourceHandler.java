@@ -74,6 +74,7 @@ public class ResourceHandler extends ChannelInboundHandlerAdapter {
 
   @Override
   public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+    // 判断条件
     if (msg instanceof HttpRequest) {
       HttpRequest req = (HttpRequest) msg;
       QueryStringDecoder queryDecoder = new QueryStringDecoder(req.getUri());
