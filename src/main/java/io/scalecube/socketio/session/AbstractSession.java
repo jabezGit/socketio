@@ -106,47 +106,67 @@ public abstract class AbstractSession implements ManagedSession {
   // 实现连接这个方法
   @Override
   public boolean connect(final Channel channel) {
+    // 启动心跳包调度器，重新？调度
     heartbeatScheduler.reschedule();
+    // 将过去的状态设置为连接
     State previousState = setState(State.CONNECTED);
     boolean initialConnect = previousState == State.CONNECTING;
+    // 如果连接成功，那么就就发送连接包到这个通道中
     if (initialConnect) {
       sendPacketToChannel(channel, connectPacket);
     }
+    // 返回连接的状态
     return initialConnect;
   }
 
+  // 关闭连接的具体方法
   @Override
   public void disconnect(final Channel channel) {
+    // 判断如果状态是已经断开了的，那么就直接退出
     if (getState() == State.DISCONNECTED) {
       return;
     }
-
+    // 1，设置状态为断开连接状态
     setState(State.DISCONNECTING);
+    // 2，关闭心跳包发送
     heartbeatScheduler.disableHeartbeat();
+    // 如果没有。。。
     if (!isUpgraded()) {
+      // 发送一个断开连接包
       sendPacket(disconnectPacket);
+      // 调用断开连接引擎，断开这个通道连接
       disconnectHandler.onSessionDisconnect(this);
     }
+    // 再一次，设置状态为断开连接
     setState(State.DISCONNECTED);
   }
 
+  // 实现发送心跳包方法
   @Override
   public void sendHeartbeat() {
     sendPacket(heartbeatPacket);
   }
 
+  // 实现发送字节流消息
   @Override
   public void send(final ByteBuf message) {
+    // 新建一个包类型
     Packet messagePacket = new Packet(PacketType.MESSAGE);
+    // 将消息加包
     messagePacket.setData(message);
+    // 把消息给发送出去
     sendPacket(messagePacket);
   }
 
+  // 这里有一个内部方法：向通道里发送包
   protected void sendPacketToChannel(final Channel channel, IPacket packet) {
+    // 填包
     fillPacketHeaders(packet);
+    // 这个方法和熟悉，写入通道并且刷新缓冲区
     channel.writeAndFlush(packet);
   }
 
+  // 这个是空方法
   @Override
   public void acceptPacket(final Channel channel, final Packet packet) {
   }
@@ -160,6 +180,7 @@ public abstract class AbstractSession implements ManagedSession {
     heartbeatScheduler.reschedule();
   }
 
+  // 填包操作
   protected void fillPacketHeaders(IPacket packet) {
     packet.setOrigin(getOrigin());
     packet.setSessionId(getSessionId());
@@ -169,6 +190,7 @@ public abstract class AbstractSession implements ManagedSession {
   protected State setState(final State state) {
     State previousState = stateHolder.getAndSet(state);
     if (previousState != state && log.isDebugEnabled()) {
+      // 每一次的状态改变，在都会在日志中显示出来
       log.debug("Session {} state changed from {} to {}", getSessionId(), previousState, state);
     }
     return previousState;
