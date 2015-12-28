@@ -17,6 +17,7 @@ import io.scalecube.socketio.Session;
 import io.scalecube.socketio.packets.Packet;
 
 /**
+ * 这个接口丰富控制要求，内部管理会话，这个接口不支持用户作为库调用
  * This interface enrich ISession interface with control methods required to manage 
  * session internally. This interface is not supposed to be used by users of the library 
  * and represents internal details session implementation and subject to change
@@ -28,6 +29,7 @@ import io.scalecube.socketio.packets.Packet;
 public interface ManagedSession extends Session {
 
   /**
+   * 连接给定的通道
    * Connects current session to given channel.
    *
    * @param channel
@@ -38,6 +40,7 @@ public interface ManagedSession extends Session {
   boolean connect(final Channel channel);
 
   /**
+   * 断开给定的会话
    * Disconnect this session.
    *
    * @param channel the channel to use for disconnection
@@ -45,11 +48,13 @@ public interface ManagedSession extends Session {
   void disconnect(final Channel channel);
 
   /**
+   * 发送心跳包
    * Send heartbeat packet to client.
    */
   void sendHeartbeat();
 
   /**
+   * 发送消息包给客户
    * Send packet message to client.
    *
    * @param messagePacket message to be sent to client
@@ -57,6 +62,7 @@ public interface ManagedSession extends Session {
   void sendPacket(final Packet messagePacket);
 
   /**
+   * 发送ACK给客户端
    * Send acknowledgment (e.g. HTTP 200) to client that message was accepted
    *
    * @param channel channel to which client connected
@@ -64,11 +70,13 @@ public interface ManagedSession extends Session {
   void acceptPacket(final Channel channel, final Packet packet);
 
   /**
+   * 重新安排心跳包给客户端
    * Reschedule heartbeats for this client.
    */
   void acceptHeartbeat();
 
   /**
+   * 将这个会话标记为 upgraded 如果这个会话升级到其他的传输层
    * Marks session as upgraded when session is going to be
    * upgraded to another transport type.
    */
