@@ -16,6 +16,7 @@ import io.scalecube.socketio.TransportType;
 
 
 /**
+ * socekt 包是指连接客户端和服务器端之间的协议
  * Socket.io packet is a message protocol unit that wired between socket.io client to socket.io server
  *
  * @author Ronen Hamias
@@ -24,6 +25,7 @@ public interface IPacket {
 
   /**
    * the type of the packet
+   * 包的类型是指，是不是说，我可以从这里开始更改成我自己定义的协议呢
    * packet type is the prefix transfered on the wire
    * @return {@link PacketType}
    */
