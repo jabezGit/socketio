@@ -40,6 +40,7 @@ public class FlashPolicyHandler extends ChannelInboundHandlerAdapter {
 
   @Override
   public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+    // 判断条件
     if (msg instanceof ByteBuf) {
       ByteBuf message = (ByteBuf) msg;
       if (message.readableBytes() >= policyRequestBuffer.readableBytes()) {
