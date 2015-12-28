@@ -25,7 +25,7 @@ import io.scalecube.socketio.packets.ConnectPacket;
 import io.scalecube.socketio.pipeline.UnsupportedTransportTypeException;
 
 /**
- *
+ * 会话存储
  * @author Anton Kharenko
  *
  */
@@ -37,18 +37,22 @@ public class SessionStorage {
 
   private final int localPort;
 
+  // 会话存储类的构造方法只需要一个参数就是存储的端口号
   public SessionStorage(int localPort) {
     this.localPort = localPort;
   }
 
+  // 判读是否包含这个Session
   public boolean containSession(final String sessionId) {
     return sessions.containsKey(sessionId);
   }
 
+  // 移除这个Session，这个就可以和数据库挂钩了
   public void removeSession(final String sessionId) {
     sessions.remove(sessionId);
   }
-
+  
+  // 这是一个函数
   public ManagedSession getSession(final ConnectPacket connectPacket,
                                     final Channel channel,
                                     final SessionDisconnectHandler disconnectHandler) throws Exception {
@@ -66,6 +70,7 @@ public class SessionStorage {
       removeSession(sessionId);
       session = getOrCreateSession(connectPacket, channel, disconnectHandler, session.getTransportType());
 
+      // 这里我们可以看到log 的使用方法
       if (log.isDebugEnabled())
         log.debug("{} transport type {} session was upgraded to new transport type {} and session {}",
             oldTransportType.name(), oldSessionId, session.getTransportType().name(), session.getSessionId());
