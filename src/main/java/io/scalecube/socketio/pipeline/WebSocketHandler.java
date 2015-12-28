@@ -72,6 +72,7 @@ public class WebSocketHandler extends ChannelInboundHandlerAdapter {
 
   @Override
   public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+    // 判断条件
     if (msg instanceof FullHttpRequest) {
       FullHttpRequest req = (FullHttpRequest) msg;
       if (req.getMethod() == HttpMethod.GET && req.getUri().startsWith(connectPath)) {
