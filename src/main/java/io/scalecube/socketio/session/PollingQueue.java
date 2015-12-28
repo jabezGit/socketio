@@ -17,7 +17,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import io.scalecube.socketio.packets.Packet;
 import io.scalecube.socketio.packets.PacketsFrame;
 
-
+// 这是一个轮询队列对象
 public class PollingQueue {
 
   private final ConcurrentLinkedQueue<Packet> packetQueue = new ConcurrentLinkedQueue<Packet>();
@@ -25,21 +25,25 @@ public class PollingQueue {
   public PollingQueue() {
   }
 
+  // 这里有一个takeall方法，具体是干啥的？采取一切？
   public PacketsFrame takeAll() {
     PacketsFrame frame = new PacketsFrame();
     Packet packet;
+    // 这里为什么用一个死循环来实现这个方法呢
     while ((packet = packetQueue.poll()) != null) {
       frame.getPackets().add(packet);
     }
     return frame;
   }
 
+  // 在队列里添加一个包
   public void add(final Packet packet) {
     if (packet != null) {
       packetQueue.add(packet);
     }
   }
 
+  // 判断包时候为空
   public boolean isEmpty() {
     return packetQueue.isEmpty();
   }
