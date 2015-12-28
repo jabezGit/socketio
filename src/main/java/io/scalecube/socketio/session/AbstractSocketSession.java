@@ -28,11 +28,13 @@ public abstract class AbstractSocketSession extends AbstractSession {
     this.channel = channel;
   }
 
+  // 为啥socket就这么简单了
   @Override
   public void sendPacket(Packet packet) {
     sendPacketToChannel(channel, packet);
   }
 
+  // 
   @Override
   public void disconnect() {
     disconnect(channel);
