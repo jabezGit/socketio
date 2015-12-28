@@ -122,6 +122,7 @@ public class HandshakeHandler extends ChannelInboundHandlerAdapter {
 
   @Override
   public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+    // 判断对象
     if (msg instanceof HttpRequest) {
       final HttpRequest req = (HttpRequest) msg;
       final HttpMethod requestMethod = req.getMethod();
