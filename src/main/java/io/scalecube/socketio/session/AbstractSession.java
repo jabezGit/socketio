@@ -63,11 +63,12 @@ public abstract class AbstractSession implements ManagedSession {
     setState(State.CONNECTING); // 设置状态为连接
   }
 
+  // 这是重写了，最顶层的那个内的方法
   @Override
   public final String getSessionId() {
     return sessionId;
   }
-
+  // 这个标志我们后面再了解
   @Override
   public final boolean isUpgradedSession() {
     return upgradedFromTransportType != null;
@@ -102,6 +103,7 @@ public abstract class AbstractSession implements ManagedSession {
     return stateHolder.get();
   }
 
+  // 实现连接这个方法
   @Override
   public boolean connect(final Channel channel) {
     heartbeatScheduler.reschedule();
