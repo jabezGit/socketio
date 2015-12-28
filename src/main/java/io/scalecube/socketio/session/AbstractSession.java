@@ -46,13 +46,13 @@ public abstract class AbstractSession implements ManagedSession {
   private volatile boolean upgraded = false;
 
   public AbstractSession(
-      final Channel channel,
-      final String sessionId,
-      final String origin,
-      final SessionDisconnectHandler disconnectHandler,
-      final TransportType upgradedFromTransportType,
-      final int localPort,
-      final SocketAddress remoteAddress) {
+      final Channel channel,  // 1,连接的通道，也就是我们之前用的socket是一样的道理，我们就是向这个通道发送消息
+      final String sessionId, // 2，我们规定每一个会话，有他的名称，这样方便我们进行管理
+      final String origin,    // 3，源
+      final SessionDisconnectHandler disconnectHandler,  //4，。。。
+      final TransportType upgradedFromTransportType, // 5，
+      final int localPort,    // 6，本地端口号
+      final SocketAddress remoteAddress) {  // 7，远程地址
     this.sessionId = sessionId;
     this.remoteAddress = remoteAddress == null ? channel.remoteAddress() : remoteAddress;
     this.origin = origin;
@@ -60,7 +60,7 @@ public abstract class AbstractSession implements ManagedSession {
     this.disconnectHandler = disconnectHandler;
     this.upgradedFromTransportType = upgradedFromTransportType;
     heartbeatScheduler = new SocketIOHeartbeatScheduler(this);
-    setState(State.CONNECTING);
+    setState(State.CONNECTING); // 设置状态为连接
   }
 
   @Override
