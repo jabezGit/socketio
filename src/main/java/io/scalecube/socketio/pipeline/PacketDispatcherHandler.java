@@ -59,6 +59,7 @@ public class PacketDispatcherHandler extends ChannelInboundHandlerAdapter implem
     super.channelInactive(ctx);
   }
 
+  // 捕获到异常
   @Override
   public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
     if (cause instanceof IOException) {
@@ -85,6 +86,7 @@ public class PacketDispatcherHandler extends ChannelInboundHandlerAdapter implem
     }
   }
 
+  // 发送数据包
   private void dispatchPacket(final Channel channel, final IPacket packet) throws Exception {
     if (packet instanceof ConnectPacket) {
       ConnectPacket connectPacket = (ConnectPacket) packet;
